@@ -3,16 +3,19 @@ import time
 import rp2
 import ntptime
 import machine
+import picosleep
 
 from bin import get_all_bins
 from bin_display import BinDisplay
 
-rp2.country('GB')
+led = machine.Pin("LED", machine.Pin.OUT)
+led.value(1)
 
-# Edit the file config_sample.py and rename it to config.py
+rp2.country('GB')
 
 display = BinDisplay()
 
+# Edit the file config_sample.py and rename it to config.py
 try:
     import config
 except ImportError:
@@ -52,9 +55,10 @@ while True:
 
     wlan.disconnect()
     wlan.active(False)
+    led.value(0)
 
     print("Sleeping")
-    time.sleep(30)  # Short time while testing
+    picosleep.seconds(60 * 60) # 1 hour
     print("Awake")
 
 
