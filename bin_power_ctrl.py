@@ -7,9 +7,9 @@ class BinPowerCtrl(PowerCtrl):
             # TIMER is required so time.sleep_ms and Timer  work
             self.EN1_CLK_SYS_TIMER,
             # USB enabled for using Thonny
-            self.EN1_CLK_USB_USBCTRL,
-            self.EN1_CLK_SYS_USBCTRL,
-            self.EN0_CLK_SYS_PLL_USB
+            #self.EN1_CLK_USB_USBCTRL,
+            #self.EN1_CLK_SYS_USBCTRL,
+            #self.EN0_CLK_SYS_PLL_USB
             # everything else is disabled while sleeping.
         )
 
