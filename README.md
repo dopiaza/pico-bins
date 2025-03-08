@@ -7,6 +7,14 @@ The bins that are due to be put out on the next collection day are highlighted i
 
 ![Bins display rear](images/display-rear.png)
 
+This code requires access to WiFi in order to set the system clock to the correct time. To configure the connection, copy `config_sample.py` to `config.py` and add your WIFI connection details:
+
+```
+# Edit the following lines and rename this file to config.py
+WIFI_SSID="<Put your SSID here>"
+WIFI_PASSWORD="<Put your WiFi password here>"
+```
+
 The code was written for my local bin schedule, but should work with any similar repeating schedule. By default, it is set up with the following bins:
 
 - Food bin (emptied weekly)
