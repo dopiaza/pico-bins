@@ -60,5 +60,8 @@ class BinDisplay:
     def error(self, message):
         self.init_display()
         self.epd.imageblack_l.text(message, 60, self.epd.lheight // 2 - 4, 0x00)
+        (year, month, mday, hour, minute, second, weekday, yearday) = time.localtime()
+        time_string = f"{hour:02d}:{minute:02d}:{second:02d} {self.day_with_suffix(mday)} {self.months[month - 1]} {year}"
+        self.epd.imageblack_l.text(time_string, 50, self.epd.lheight // 2 + 20, 0x00)
         self.epd.display()
         self.sleep()

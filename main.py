@@ -3,10 +3,11 @@ import time
 import rp2
 import ntptime
 import machine
-import picosleep
 
 from bin import get_all_bins
 from bin_display import BinDisplay
+from logger import Logger
+from bin_power_ctrl import BinPowerCtrl
 
 led = machine.Pin("LED", machine.Pin.OUT)
 led.value(1)
@@ -14,6 +15,7 @@ led.value(1)
 rp2.country('GB')
 
 display = BinDisplay()
+logger = Logger()
 
 # Edit the file config_sample.py and rename it to config.py
 try:
@@ -23,9 +25,10 @@ except ImportError:
     exit()
 
 
-wlan = network.WLAN(network.STA_IF)
 
 while True:
+    led.value(1)
+    wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
     wlan.connect(config.WIFI_SSID,  config.WIFI_PASSWORD)
 
@@ -34,32 +37,36 @@ while True:
         if wlan.status() < 0 or wlan.status() >= 3:
             break
         max_wait -= 1
-        print('Waiting for connection...')
+        logger.log('Waiting for connection...')
         time.sleep(5)
 
     if wlan.status() != 3:
         display.error("Could not connect to WiFi")
     else:
-        print('connected')
+        logger.log('connected')
         status = wlan.ifconfig()
-        print('ip = ' + status[0])
+        logger.log('ip = ' + status[0])
 
-        print(wlan.ifconfig())
+        logger.log(wlan.ifconfig())
 
-        print("Setting time")
+        logger.log("Setting time")
         ntptime.settime()
 
         bins = get_all_bins()
 
         display.bins(bins)
+        #display.error("Timestamp")
 
+    led.value(0)
     wlan.disconnect()
     wlan.active(False)
-    led.value(0)
+    wlan.deinit()
 
-    print("Sleeping")
-    picosleep.seconds(60 * 60) # 1 hour
-    print("Awake")
+    logger.log("Sleeping")
+    pwr = BinPowerCtrl()
+    time.sleep_ms(600000)  # 10 minutes, so we can test easily
+    pwr.restore()
+    logger.log("Awake")
 
 
 
